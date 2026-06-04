@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import time
+from pathlib import Path
 from typing import Any
 from urllib.parse import quote_plus
 
@@ -312,6 +313,66 @@ def _extract_stream_or_live_once(
             return {**stream_format, "is_live": False}
 
         raise UnplayableMediaError(f"No audio stream found for {video_id}")
+
+
+def _format_selector_for_stream(stream_format: dict[str, Any]) -> str:
+    """Build a yt-dlp format selector for a previously selected stream format."""
+    format_id = stream_format.get("format_id")
+    if format_id:
+        return str(format_id)
+    return "m4a/bestaudio/best"
+
+
+def download_audio_to_path(
+    yt_dlp: Any,
+    ydl_opts: dict[str, Any],
+    video_id: str,
+    dest_stem: Path,
+    stream_format: dict[str, Any],
+) -> tuple[Path, dict[str, Any]]:
+    """Download VOD audio to disk, preserving the original container.
+
+    :param yt_dlp: The imported yt_dlp module.
+    :param ydl_opts: Base yt-dlp options dict.
+    :param video_id: YouTube video ID.
+    :param dest_stem: Path without extension; yt-dlp appends the container extension.
+    :param stream_format: Selected format dict from extract_stream_or_live.
+    :returns: Tuple of (downloaded file path, metadata dict for cache sidecar).
+    """
+    outtmpl = str(dest_stem.parent / f"{dest_stem.name}.%(ext)s")
+    opts = {
+        **ydl_opts,
+        "format": _format_selector_for_stream(stream_format),
+        "outtmpl": outtmpl,
+        "skip_download": False,
+        "quiet": ydl_opts.get("quiet", True),
+    }
+    url = f"{YT_DOMAIN}/watch?v={video_id}"
+    with yt_dlp.YoutubeDL(opts) as ydl:
+        try:
+            info = ydl.extract_info(url, download=True)
+        except yt_dlp.utils.DownloadError as err:
+            raise UnplayableMediaError(str(err)) from err
+    if not info:
+        raise UnplayableMediaError(f"Download failed for {video_id}")
+    requested = info.get("requested_downloads") or []
+    if requested and requested[0].get("filepath"):
+        downloaded = Path(requested[0]["filepath"])
+    elif info.get("filepath"):
+        downloaded = Path(info["filepath"])
+    else:
+        ext = info.get("ext") or stream_format.get("ext") or "bin"
+        downloaded = dest_stem.parent / f"{dest_stem.name}.{ext}"
+    if not downloaded.is_file() or downloaded.stat().st_size == 0:
+        raise UnplayableMediaError(f"Download produced no file for {video_id}")
+    metadata = {
+        "format_id": info.get("format_id") or stream_format.get("format_id"),
+        "audio_ext": info.get("ext") or stream_format.get("ext"),
+        "audio_channels": info.get("audio_channels") or stream_format.get("audio_channels"),
+        "asr": info.get("asr") or stream_format.get("asr"),
+        "duration": info.get("duration") or stream_format.get("duration"),
+    }
+    return downloaded, metadata
 
 
 def _extract_hls_manifest(info: dict[str, Any], video_id: str) -> dict[str, Any]:
