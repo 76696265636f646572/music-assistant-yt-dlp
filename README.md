@@ -4,7 +4,7 @@ A Home Assistant add-on that packages the [Music Assistant](https://music-assist
 
 ## Installation
 
-[![Add to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fgiantorth%2Fmusic-assistant-yt-dlp)
+[![Add to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2F76696265636f646572%2Fmusic-assistant-yt-dlp)
 
 Or manually:
 
@@ -12,7 +12,7 @@ Or manually:
 2. Click the three-dot menu (top right) and select **Repositories**
 3. Add this repository URL:
    ```
-   https://github.com/giantorth/music-assistant-yt-dlp
+   https://github.com/76696265636f646572/music-assistant-yt-dlp
    ```
 4. Find **Music Assistant Server (YouTube)** in the add-on store and install it
 

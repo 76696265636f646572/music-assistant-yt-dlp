@@ -4,8 +4,8 @@
   "stage": "beta",
   "name": "YouTube",
   "description": "Play audio from YouTube videos using yt-dlp. Does not require a YouTube Music account.",
-  "codeowners": ["@giantorth"],
+  "codeowners": ["@76696265636f646572"],
   "requirements": [],
-  "documentation": "https://github.com/giantorth/music-assistant-yt-dlp#readme",
+  "documentation": "https://github.com/76696265636f646572/music-assistant-yt-dlp#readme",
   "multi_instance": false
 }
