@@ -1,3 +1,6 @@
+## 2.8.9-patch.45c458f
+- feat: enhance audio download options by disabling .part file creation
+
 ## 2.8.9
 - Upstream Music Assistant server update to 2.8.9
 
