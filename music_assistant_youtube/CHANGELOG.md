@@ -1,3 +1,6 @@
+## 2.8.9-patch.d562020
+- chore: update description to reflect caching feature in YouTube provider
+
 ## 2.8.9-patch.45c458f
 - feat: enhance audio download options by disabling .part file creation
 
