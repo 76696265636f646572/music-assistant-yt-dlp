@@ -345,6 +345,7 @@ def download_audio_to_path(
         "format": _format_selector_for_stream(stream_format),
         "outtmpl": outtmpl,
         "skip_download": False,
+        "nopart": True,  # --no-part: write directly to output, no .part files
         "quiet": ydl_opts.get("quiet", True),
     }
     url = f"{YT_DOMAIN}/watch?v={video_id}"
