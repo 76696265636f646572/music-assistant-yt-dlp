@@ -1,3 +1,6 @@
+## 2.8.9-patch.3caf143
+- chore: update repository references to new maintainer ID
+
 ## 2.8.9-patch.d562020
 - chore: update description to reflect caching feature in YouTube provider
 
